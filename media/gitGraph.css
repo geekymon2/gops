@@ -314,3 +314,74 @@ svg.graph {
   color: var(--vscode-editor-foreground);
   opacity: 0.7;
 }
+
+#filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  background: var(--vscode-editor-background);
+  flex-shrink: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+#filter-bar input[type="text"],
+#filter-bar input[type="date"] {
+  background: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border, var(--vscode-panel-border));
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--vscode-font-family);
+  height: 28px;
+  outline: none;
+}
+
+#filter-bar input[type="text"]:focus,
+#filter-bar input[type="date"]:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+#filter-bar input[type="text"] {
+  width: 140px;
+}
+
+#filter-bar input[type="date"] {
+  width: 140px;
+  color-scheme: dark;
+}
+
+#filter-bar #filter-clear {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-button-border, var(--vscode-panel-border));
+  border-radius: 3px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: var(--vscode-font-family);
+  cursor: pointer;
+  height: 28px;
+  white-space: nowrap;
+}
+
+#filter-bar #filter-clear:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+#filter-result-count {
+  color: var(--vscode-descriptionForeground);
+  font-size: 12px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+#filter-bar #filter-message {
+  width: 240px;
+}
+
+#filter-bar #filter-author {
+  width: 240px;
+}

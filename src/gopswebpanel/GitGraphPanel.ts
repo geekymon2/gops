@@ -43,12 +43,16 @@ export class GitGraphPanel {
     const scriptUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(extensionUri, "media", "webPanel.js"),
     );
+    const filterScriptUri = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, "media", "gitGraphFilter.js"),
+    );
     this.panel.webview.html = renderGitGraph(
       branchName,
       commits,
       cssUri,
       detailCssUri,
       scriptUri,
+      filterScriptUri,
     );
   }
 

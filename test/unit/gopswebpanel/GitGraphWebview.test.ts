@@ -20,6 +20,9 @@ const mockDetailCssUri = {
 const mockScriptUri = {
   toString: () => "vscode-resource:/media/webPanel.js",
 } as any;
+const mockFilterScriptUri = {
+  toString: () => "vscode-resource:/media/gitGraphFilter.js",
+} as any;
 
 const makeCommit = (hash: string): GitCommitModel =>
   new GitCommitModel(hash, "Fix bug", "John Doe", "2026-01-01", false, [], []);
@@ -57,6 +60,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("<!DOCTYPE html>");
@@ -71,22 +75,37 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("vscode-resource:/media/gitGraph.css");
     expect(html).toContain("vscode-resource:/media/gitGraphDetail.css");
   });
 
-  it("includes the script tag", () => {
+  it("includes the webPanel script tag", () => {
     const html = renderGitGraph(
       "main",
       [makeCommit("abc1234")],
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("vscode-resource:/media/webPanel.js");
+  });
+
+  it("includes the filter script tag", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain("vscode-resource:/media/gitGraphFilter.js");
   });
 
   it("renders the branch name in the header", () => {
@@ -96,6 +115,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("feature/my-branch");
@@ -109,6 +129,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("2 commits");
@@ -121,6 +142,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("GIT GRAPH");
@@ -134,6 +156,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("Hash");
@@ -149,6 +172,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain('id="commits-container"');
@@ -162,6 +186,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain('id="detail-panel"');
@@ -174,6 +199,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("width: 50px");
@@ -187,6 +213,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(GitGraphLayout.computeLayout).toHaveBeenCalledWith(commits);
@@ -202,6 +229,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(GitGraphRenderer.drawCommitRow).not.toHaveBeenCalled();
@@ -215,6 +243,7 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("1 commits");
@@ -230,9 +259,109 @@ describe("renderGitGraph", () => {
       mockCssUri,
       mockDetailCssUri,
       mockScriptUri,
+      mockFilterScriptUri,
     );
 
     expect(html).toContain("0 commits");
     expect(GitGraphRenderer.drawCommitRow).not.toHaveBeenCalled();
+  });
+
+  it("renders the filter bar", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-bar"');
+  });
+
+  it("renders the hash filter input", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-hash"');
+    expect(html).toContain('placeholder="Hash"');
+  });
+
+  it("renders the message filter input", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-message"');
+    expect(html).toContain('placeholder="Message"');
+  });
+
+  it("renders the author filter input", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-author"');
+    expect(html).toContain('placeholder="Author"');
+  });
+
+  it("renders the date from and to inputs", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-date-from"');
+    expect(html).toContain('id="filter-date-to"');
+    expect(html).toContain('type="date"');
+  });
+
+  it("renders the clear button", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    expect(html).toContain('id="filter-clear"');
+    expect(html).toContain("Clear");
+  });
+
+  it("renders filter script before webPanel script", () => {
+    const html = renderGitGraph(
+      "main",
+      [makeCommit("abc1234")],
+      mockCssUri,
+      mockDetailCssUri,
+      mockScriptUri,
+      mockFilterScriptUri,
+    );
+
+    const filterIdx = html.indexOf("gitGraphFilter.js");
+    const webPanelIdx = html.indexOf("webPanel.js");
+    expect(filterIdx).toBeLessThan(webPanelIdx);
   });
 });

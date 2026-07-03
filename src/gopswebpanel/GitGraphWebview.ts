@@ -11,6 +11,7 @@ export function renderGitGraph(
   cssUri: vscode.Uri,
   detailCssUri: vscode.Uri,
   scriptUri: vscode.Uri,
+  filterScriptUri: vscode.Uri,
 ): string {
   const layout = GitGraphLayout.computeLayout(commits);
 
@@ -58,6 +59,15 @@ export function renderGitGraph(
         <span class="commit-count">${commits.length} commits</span>
       </div>
 
+      <div id="filter-bar">
+        <input type="text" id="filter-hash" placeholder="Hash" />
+        <input type="text" id="filter-message" placeholder="Message" />
+        <input type="text" id="filter-author" placeholder="Author" />
+        <input type="date" id="filter-date-from" />
+        <input type="date" id="filter-date-to" />
+        <button id="filter-clear">Clear</button>
+      </div>
+
       <div id="column-headers">
         <div class="col-graph" id="header-graph"></div>
         <div class="col-hash">Hash</div>
@@ -72,6 +82,7 @@ export function renderGitGraph(
 
       ${renderDetailPanel()}
 
+      <script src="${filterScriptUri}"></script>
       <script src="${scriptUri}"></script>
     </body>
     </html>
